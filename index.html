@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 宗教課選擇題測驗</title>
+    <title>📚 選擇題測驗系統</title>
     <style>
         * {
             margin: 0;
@@ -38,42 +38,94 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        /* Lesson Selection Screen */
-        #lesson-select {
+        /* Subject Selection Screen */
+        #subject-select {
             text-align: center;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .subject-btn {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 15px auto;
+            padding: 25px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Subject colors */
+        .subject-btn[data-subject="religion"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .subject-btn[data-subject="chinese"] {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .subject-btn[data-subject="science"] {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .subject-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .subject-btn.selected {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
 
         .lesson-btn {
             display: block;
             width: 100%;
             max-width: 400px;
-            margin: 15px auto;
-            padding: 20px 30px;
-            font-size: 18px;
+            margin: 10px auto;
+            padding: 15px 25px;
+            font-size: 16px;
             border: none;
-            border-radius: 15px;
+            border-radius: 12px;
             cursor: pointer;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #f0f3ff;
+            color: #333;
             transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .lesson-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            background: #667eea;
+            color: white;
         }
 
         .lesson-btn.selected {
             background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            transform: scale(1.05);
+            color: white;
         }
 
         .start-btn {
             margin-top: 30px;
             padding: 20px 60px;
             font-size: 22px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(17, 153, 142, 0.5);
         }
 
         /* Quiz Screen */
@@ -172,6 +224,17 @@
         .back-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
         }
 
         .progress-bar {
@@ -212,23 +275,45 @@
             background: #f8d7da;
             color: #721c24;
         }
+
+        /* Hidden/Visible classes */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📚 宗教課選擇題測驗</h1>
+        <h1>📚 選擇題測驗系統</h1>
+
+        <!-- Subject Selection -->
+        <div id="subject-select" class="card">
+            <h2 class="section-title">請選擇科目：</h2>
+            
+            <button class="subject-btn" data-subject="religion" onclick="selectSubject('religion')">
+                ⛪ 宗教科
+            </button>
+            
+            <button class="subject-btn" data-subject="chinese" onclick="selectSubject('chinese')">
+                📖 中文科
+            </button>
+            
+            <button class="subject-btn" data-subject="science" onclick="selectSubject('science')">
+                🔬 常識科
+            </button>
+        </div>
 
         <!-- Lesson Selection -->
-        <div id="lesson-select" class="card">
-            <h2 style="margin-bottom: 25px; color: #333;">請選擇要測驗的課文：</h2>
-            <button class="lesson-btn" onclick="toggleLesson('lesson9')">第九課 - 嫉妒傷人</button>
-            <button class="lesson-btn" onclick="toggleLesson('lesson10')">第十課 - 貪心招禍</button>
-            <button class="lesson-btn" onclick="toggleLesson('lesson11')">第十一課 - 納阿曼 (禮物)</button>
-            <button class="lesson-btn" onclick="toggleLesson('lesson12')">第十二課 - 以斯帖 (陰謀)</button>
-            <button class="lesson-btn" onclick="toggleLesson('lesson13')">第十三課 - 迷色輕薄人</button>
-            <button class="lesson-btn" onclick="toggleLesson('all')">📋 全部課文</button>
-
-            <button class="lesson-btn start-btn" onclick="startQuiz()">🚀 開始測驗</button>
+        <div id="lesson-select" class="card hidden">
+            <button class="lesson-btn" onclick="backToSubjects()" style="max-width: 150px; margin-bottom: 20px;">
+                ← 返回科目
+            </button>
+            
+            <h2 id="lessons-title" class="section-title">請選擇課文：</h2>
+            
+            <div id="lessons-container"></div>
+            
+            <button class="start-btn" onclick="startQuiz()">🚀 開始測驗</button>
         </div>
 
         <!-- Quiz Screen -->
@@ -256,201 +341,320 @@
             <h2>🎉 測驗完成！</h2>
             <div class="result-score" id="final-score">0</div>
             <div class="result-message" id="result-message"></div>
-            <button class="lesson-btn back-btn" onclick="backToMenu()">🔙 回到主選單</button>
+            <button class="back-btn" onclick="backToMenu()">🔙 回到主選單</button>
         </div>
     </div>
 
     <script>
-        // Question Bank from ethan_test.pdf
+        // ============================================
+        // 📚 題庫 - 可在此處新增題目
+        // ============================================
         const questionBank = {
-            lesson9: [
-                {
-                    question: "撒烏耳見軍民和臣僕都非常喜愛達味，於是？",
-                    options: ["A. 感到很開心", "B. 十分嫉妒他", "C. 送給他很多禮物", "D. 讓他做王"],
-                    correct: 1,
-                    explanation: "撒烏耳見軍民和臣僕都非常喜愛達味，從那一天起，便常嫉視他。"
-                },
-                {
-                    question: "達味在宮裏彈琴給撒烏耳聽時，撒烏耳？",
-                    options: ["A. 稱讚他的琴藝", "B. 突然拿起長槍擲向達味", "C. 叫他離開宮殿", "D. 給他獎賞"],
-                    correct: 1,
-                    explanation: "撒烏耳突然拿起一根長槍，向達味擲過去，想把他全在牆上，達味連忙避開。"
-                },
-                {
-                    question: "撒烏耳是以色列歷史上第幾位君王？",
-                    options: ["A. 第一位", "B. 第二位", "C. 第三位", "D. 第四位"],
-                    correct: 0,
-                    explanation: "撒烏耳是以色列歷史上第一位君王，由撒慕爾先知所立。"
-                },
-                {
-                    question: "達味後來成為？",
-                    options: ["A. 下一位君王", "B. 祭司", "C. 先知", "D. 士兵首領"],
-                    correct: 0,
-                    explanation: "撒烏耳死後，天主藉著先知任命達味做以色列的新君王。"
-                },
-                {
-                    question: "「救世主」會在誰的後裔中出現？",
-                    options: ["A. 撒烏耳的後裔", "B. 達味的後裔", "C. 摩西的後裔", "D. 所羅門的後裔"],
-                    correct: 1,
-                    explanation: "彌賽亞（救世主）會在達味的後裔中出現。"
-                }
-            ],
-            lesson10: [
-                {
-                    question: "納阿曼患了什麼病？",
-                    options: ["A. 發燒", "B. 癲病", "C. 骨折", "D. 眼疾"],
-                    correct: 1,
-                    explanation: "納阿曼患了癲病，這是由麻瘋桿菌引起的皮膚傳染病。"
-                },
-                {
-                    question: "納阿曼的婢女建議他去求誰醫治？",
-                    options: ["A. 君王", "B. 先知攝里祿", "C. 祭司", "D. 醫生"],
-                    correct: 1,
-                    explanation: "他的婢女教他求先知攝里祿醫治。"
-                },
-                {
-                    question: "先知吩咐納阿曼到哪條河浸洗七次？",
-                    options: ["A. 約但河", "B. 尼羅河", "C. 幼發拉底河", "D. 底格里斯河"],
-                    correct: 0,
-                    explanation: "先知吩咐一個使者叫納阿曼將軍到約但河裏浸洗七次。"
-                },
-                {
-                    question: "納阿曼起初對先知的建議有什麼反應？",
-                    options: ["A. 很樂意接受", "B. 很生氣不想理會", "C. 立即照做", "D. 感謝先知"],
-                    correct: 1,
-                    explanation: "將軍便生氣，因先知沒有親自見他，而所要求的事也很平常。"
-                },
-                {
-                    question: "納阿曼後來聽誰的勸告去浸洗？",
-                    options: ["A. 妻子", "B. 僕人", "C. 君王", "D. 士兵"],
-                    correct: 1,
-                    explanation: "他的僕人勸他要照著先知的話去做。"
-                }
-            ],
-            lesson11: [
-                {
-                    question: "先知拒絕接受納阿曼的什麼？",
-                    options: ["A. 金子", "B. 銀子和衣服", "C. 所有禮物", "D. 食物"],
-                    correct: 2,
-                    explanation: "先知拒絕接受金子、銀子和衣服作為禮物。"
-                },
-                {
-                    question: "先知的僕人做了什麼事？",
-                    options: ["A. 收了納阿曼的禮物", "B. 趕走納阿曼", "C. 醫治病人", "D. 教導先知"],
-                    correct: 0,
-                    explanation: "先知的僕人收了納阿曼的禮物。"
-                },
-                {
-                    question: "先知知道後如何對待僕人？",
-                    options: ["A. 稱讚他", "B. 懲罰他", "C. 原諒他", "D. 聘請他"],
-                    correct: 1,
-                    explanation: "攝里祿知道僕人收了禮物，便懲罰他說：『好...那你連他的癲病也接收吧！』"
-                }
-            ],
-            lesson12: [
-                {
-                    question: "摩爾德開是哪个國家的人？",
-                    options: ["A. 以色列", "B. 波斯", "C. 埃及", "D. 希臘"],
-                    correct: 1,
-                    explanation: "在波斯國，有一位熱心恭敬天主的猶太人摩爾德開。"
-                },
-                {
-                    question: "摩爾德開後來成為了什麼？",
-                    options: ["A. 君王", "B. 宰相", "C. 祭司", "D. 先知"],
-                    correct: 1,
-                    explanation: "君王遂委派他在朝廷內供職，後來更任命摩爾德開接替哈曼做宰相。"
-                },
-                {
-                    question: "哈曼要殺死誰和國內一切猶太人？",
-                    options: ["A. 只有君王", "B. 只有摩爾德開", "C. 摩爾德開和一切猶太人", "D. 只有皇后"],
-                    correct: 2,
-                    explanation: "哈曼決定要殺死摩爾德開和國內一切猶太人。"
-                },
-                {
-                    question: "誰成為了王后？",
-                    options: ["A. 摩爾德開的妻子", "B. 艾斯德爾", "C. 哈曼的女兒", "D. 摩爾德開的姊妹"],
-                    correct: 1,
-                    explanation: "君王娶了摩爾德開的養女艾斯德爾做王後。"
-                },
-                {
-                    question: "「猶太人」這個名稱來自哪裡？",
-                    options: ["A. 北國的以法蓮支派", "B. 南國的猶大支派", "C. 東邊的便雅憫支派", "D. 西邊的西緬支派"],
-                    correct: 1,
-                    explanation: "「猶太人」是指南國猶大支派的人民。"
-                }
-            ],
-            lesson13: [
-                {
-                    question: "若瑟被誰賣到埃及？",
-                    options: ["A. 商人", "B. 哥哥們", "C. 僕人", "D. 陌生人"],
-                    correct: 1,
-                    explanation: "雅各伯的兒子若瑟被十位哥哥賣往埃及。"
-                },
-                {
-                    question: "若瑟的主人妻子對他有何要求？",
-                    options: ["A. 請他吃飯", "B. 與她同睡", "C. 教他讀書", "D. 幫她工作"],
-                    correct: 1,
-                    explanation: "女主人見若瑟容貌俊美，向他以目傳情，並說：『你與我同睡罷！』"
-                },
-                {
-                    question: "若瑟如何回應女主人的要求？",
-                    options: ["A. 答應她", "B. 立即拒絕", "C. 離開房間", "D. 告訴主人"],
-                    correct: 1,
-                    explanation: "若瑟立即拒絕，說：『我怎能做這極惡的事，對主人不忠不義呢？』"
-                },
-                {
-                    question: "若瑟最後被關進了哪裡？",
-                    options: ["A. 皇宮", "B. 監獄", "C. 穀倉", "D. 僕人房"],
-                    correct: 1,
-                    explanation: "主人聽後十分生氣，把若瑟關進監獄裏。"
-                }
-            ]
+            // ⛪ 宗教科
+            religion: {
+                lesson9: [
+                    {
+                        question: "撒烏耳見軍民和臣僕都非常喜愛達味，於是？",
+                        options: ["A. 感到很開心", "B. 十分嫉妒他", "C. 送給他很多禮物", "D. 讓他做王"],
+                        correct: 1,
+                        explanation: "撒烏耳見軍民和臣僕都非常喜愛達味，從那一天起，便常嫉視他。"
+                    },
+                    {
+                        question: "達味在宮裏彈琴給撒烏耳聽時，撒烏耳？",
+                        options: ["A. 稱讚他的琴藝", "B. 突然拿起長槍擲向達味", "C. 叫他離開宮殿", "D. 給他獎賞"],
+                        correct: 1,
+                        explanation: "撒烏耳突然拿起一根長槍，向達味擲過去，想把他全在牆上，達味連忙避開。"
+                    },
+                    {
+                        question: "撒烏耳是以色列歷史上第幾位君王？",
+                        options: ["A. 第一位", "B. 第二位", "C. 第三位", "D. 第四位"],
+                        correct: 0,
+                        explanation: "撒烏耳是以色列歷史上第一位君王，由撒慕爾先知所立。"
+                    },
+                    {
+                        question: "達味後來成為？",
+                        options: ["A. 下一位君王", "B. 祭司", "C. 先知", "D. 士兵首領"],
+                        correct: 0,
+                        explanation: "撒烏耳死後，天主藉著先知任命達味做以色列的新君王。"
+                    },
+                    {
+                        question: "「救世主」會在誰的後裔中出現？",
+                        options: ["A. 撒烏耳的後裔", "B. 達味的後裔", "C. 摩西的後裔", "D. 所羅門的後裔"],
+                        correct: 1,
+                        explanation: "彌賽亞（救世主）會在達味的後裔中出現。"
+                    }
+                ],
+                lesson10: [
+                    {
+                        question: "納阿曼患了什麼病？",
+                        options: ["A. 發燒", "B. 癲病", "C. 骨折", "D. 眼疾"],
+                        correct: 1,
+                        explanation: "納阿曼患了癲病，這是由麻瘋桿菌引起的皮膚傳染病。"
+                    },
+                    {
+                        question: "納阿曼的婢女建議他去求誰醫治？",
+                        options: ["A. 君王", "B. 先知攝里祿", "C. 祭司", "D. 醫生"],
+                        correct: 1,
+                        explanation: "他的婢女教他求先知攝里祿醫治。"
+                    },
+                    {
+                        question: "先知吩咐納阿曼到哪條河浸洗七次？",
+                        options: ["A. 約但河", "B. 尼羅河", "C. 幼發拉底河", "D. 底格里斯河"],
+                        correct: 0,
+                        explanation: "先知吩咐一個使者叫納阿曼將軍到約但河裏浸洗七次。"
+                    },
+                    {
+                        question: "納阿曼起初對先知的建議有什麼反應？",
+                        options: ["A. 很樂意接受", "B. 很生氣不想理會", "C. 立即照做", "D. 感謝先知"],
+                        correct: 1,
+                        explanation: "將軍便生氣，因先知沒有親自見他，而所要求的事也很平常。"
+                    },
+                    {
+                        question: "納阿曼後來聽誰的勸告去浸洗？",
+                        options: ["A. 妻子", "B. 僕人", "C. 君王", "D. 士兵"],
+                        correct: 1,
+                        explanation: "他的僕人勸他要照著先知的話去做。"
+                    }
+                ],
+                lesson11: [
+                    {
+                        question: "先知拒絕接受納阿曼的什麼？",
+                        options: ["A. 金子", "B. 銀子和衣服", "C. 所有禮物", "D. 食物"],
+                        correct: 2,
+                        explanation: "先知拒絕接受金子、銀子和衣服作為禮物。"
+                    },
+                    {
+                        question: "先知的僕人做了什麼事？",
+                        options: ["A. 收了納阿曼的禮物", "B. 趕走納阿曼", "C. 醫治病人", "D. 教導先知"],
+                        correct: 0,
+                        explanation: "先知的僕人收了納阿曼的禮物。"
+                    },
+                    {
+                        question: "先知知道後如何對待僕人？",
+                        options: ["A. 稱讚他", "B. 懲罰他", "C. 原諒他", "D. 聘請他"],
+                        correct: 1,
+                        explanation: "攝里祿知道僕人收了禮物，便懲罰他說：『好...那你連他的癲病也接收吧！』"
+                    }
+                ],
+                lesson12: [
+                    {
+                        question: "摩爾德開是哪个國家的人？",
+                        options: ["A. 以色列", "B. 波斯", "C. 埃及", "D. 希臘"],
+                        correct: 1,
+                        explanation: "在波斯國，有一位熱心恭敬天主的猶太人摩爾德開。"
+                    },
+                    {
+                        question: "摩爾德開後來成為了什麼？",
+                        options: ["A. 君王", "B. 宰相", "C. 祭司", "D. 先知"],
+                        correct: 1,
+                        explanation: "君王遂委派他在朝廷內供職，後來更任命摩爾德開接替哈曼做宰相。"
+                    },
+                    {
+                        question: "哈曼要殺死誰和國內一切猶太人？",
+                        options: ["A. 只有君王", "B. 只有摩爾德開", "C. 摩爾德開和一切猶太人", "D. 只有皇后"],
+                        correct: 2,
+                        explanation: "哈曼決定要殺死摩爾德開和國內一切猶太人。"
+                    },
+                    {
+                        question: "誰成為了王后？",
+                        options: ["A. 摩爾德開的妻子", "B. 艾斯德爾", "C. 哈曼的女兒", "D. 摩爾德開的姊妹"],
+                        correct: 1,
+                        explanation: "君王娶了摩爾德開的養女艾斯德爾做王後。"
+                    },
+                    {
+                        question: "「猶太人」這個名稱來自哪裡？",
+                        options: ["A. 北國的以法蓮支派", "B. 南國的猶大支派", "C. 東邊的便雅憫支派", "D. 西邊的西緬支派"],
+                        correct: 1,
+                        explanation: "「猶太人」是指南國猶大支派的人民。"
+                    }
+                ],
+                lesson13: [
+                    {
+                        question: "若瑟被誰賣到埃及？",
+                        options: ["A. 商人", "B. 哥哥們", "C. 僕人", "D. 陌生人"],
+                        correct: 1,
+                        explanation: "雅各伯的兒子若瑟被十位哥哥賣往埃及。"
+                    },
+                    {
+                        question: "若瑟的主人妻子對他有何要求？",
+                        options: ["A. 請他吃飯", "B. 與她同睡", "C. 教他讀書", "D. 幫她工作"],
+                        correct: 1,
+                        explanation: "女主人見若瑟容貌俊美，向他以目傳情，並說：『你與我同睡罷！』"
+                    },
+                    {
+                        question: "若瑟如何回應女主人的要求？",
+                        options: ["A. 答應她", "B. 立即拒絕", "C. 離開房間", "D. 告訴主人"],
+                        correct: 1,
+                        explanation: "若瑟立即拒絕，說：『我怎能做這極惡的事，對主人不忠不義呢？』"
+                    },
+                    {
+                        question: "若瑟最後被關進了哪裡？",
+                        options: ["A. 皇宮", "B. 監獄", "C. 穀倉", "D. 僕人房"],
+                        correct: 1,
+                        explanation: "主人聽後十分生氣，把若瑟關進監獄裏。"
+                    }
+                ]
+            },
+            
+            // 📖 中文科 - 預留位置
+            chinese: {
+                lesson1: [
+                    {
+                        question: "（此為範例）以下哪個是唐詩？",
+                        options: ["A. 春曉", "B. 靜夜思", "C. 登鸛雀樓", "D. 全部都是"],
+                        correct: 3,
+                        explanation: "春曉、靜夜思、登鸛雀樓都是著名唐詩。"
+                    }
+                ]
+            },
+            
+            // 🔬 常識科 - 預留位置
+            science: {
+                lesson1: [
+                    {
+                        question: "（此為範例）植物需要什麼才能生長？",
+                        options: ["A. 陽光", "B. 水", "C. 泥土", "D. 全部都需要"],
+                        correct: 3,
+                        explanation: "植物需要陽光、水分和泥土中的養分才能健康生長。"
+                    }
+                ]
+            }
         };
 
+        // 課文名稱對照表
+        const lessonNames = {
+            religion: {
+                lesson9: "第九課 - 嫉妒傷人",
+                lesson10: "第十課 - 貪心招禍",
+                lesson11: "第十一課 - 納阿曼 (禮物)",
+                lesson12: "第十二課 - 以斯帖 (陰謀)",
+                lesson13: "第十三課 - 迷色輕薄人"
+            },
+            chinese: {
+                lesson1: "第一課 - （待輸入）"
+            },
+            science: {
+                lesson1: "第一課 - （待輸入）"
+            }
+        };
+
+        let currentSubject = null;
         let selectedLessons = [];
         let currentQuestions = [];
         let currentIndex = 0;
         let score = 0;
 
-        function toggleLesson(lesson) {
-            const btn = event.target;
-            if (lesson === 'all') {
-                selectedLessons = Object.keys(questionBank);
-                document.querySelectorAll('.lesson-btn').forEach(b => {
-                    if (!b.classList.contains('start-btn')) {
-                        b.classList.add('selected');
-                    }
-                });
-                return;
-            }
+        // 選擇科目
+        function selectSubject(subject) {
+            currentSubject = subject;
+            
+            // 更新按鈕樣式
+            document.querySelectorAll('.subject-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-subject="${subject}"]`).classList.add('selected');
+            
+            // 顯示課文選擇
+            showLessonSelect();
+        }
 
-            if (selectedLessons.includes(lesson)) {
-                selectedLessons = selectedLessons.filter(l => l !== lesson);
+        // 顯示課文選擇頁面
+        function showLessonSelect() {
+            document.getElementById('subject-select').classList.add('hidden');
+            document.getElementById('lesson-select').classList.remove('hidden');
+            
+            // 更新標題
+            const subjectNames = {
+                religion: "⛪ 宗教科",
+                chinese: "📖 中文科",
+                science: "🔬 常識科"
+            };
+            document.getElementById('lessons-title').textContent = `${subjectNames[currentSubject]} - 請選擇課文：`;
+            
+            // 生成課文按鈕
+            const container = document.getElementById('lessons-container');
+            container.innerHTML = '';
+            
+            const lessons = questionBank[currentSubject];
+            for (const [lessonId, lessonData] of Object.entries(lessons)) {
+                const name = lessonNames[currentSubject][lessonId] || lessonId;
+                const count = lessonData.length;
+                const btn = document.createElement('button');
+                btn.className = 'lesson-btn';
+                btn.dataset.lesson = lessonId;
+                btn.innerHTML = `${name} <small style="color: #666;">(${count}題)</small>`;
+                btn.onclick = () => toggleLesson(lessonId, btn);
+                container.appendChild(btn);
+            }
+            
+            // 加入全選按鈕
+            const allBtn = document.createElement('button');
+            allBtn.className = 'lesson-btn';
+            allBtn.innerHTML = '📋 全部課文';
+            allBtn.onclick = () => toggleAllLessons();
+            container.appendChild(allBtn);
+        }
+
+        // 選擇/取消選擇課文
+        function toggleLesson(lessonId, btn) {
+            if (selectedLessons.includes(lessonId)) {
+                selectedLessons = selectedLessons.filter(l => l !== lessonId);
                 btn.classList.remove('selected');
             } else {
-                selectedLessons.push(lesson);
+                selectedLessons.push(lessonId);
                 btn.classList.add('selected');
             }
         }
 
+        // 全選/取消全選
+        function toggleAllLessons() {
+            const allBtns = document.querySelectorAll('#lessons-container .lesson-btn');
+            
+            if (selectedLessons.length === allBtns.length - 1) { // -1 for "全部課文" button
+                // 取消全選
+                selectedLessons = [];
+                allBtns.forEach(btn => btn.classList.remove('selected'));
+            } else {
+                // 全選
+                selectedLessons = [];
+                allBtns.forEach(btn => {
+                    const lessonId = btn.dataset.lesson;
+                    if (lessonId) {
+                        selectedLessons.push(lessonId);
+                        btn.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        // 返回科目選擇
+        function backToSubjects() {
+            currentSubject = null;
+            selectedLessons = [];
+            document.getElementById('lesson-select').classList.add('hidden');
+            document.getElementById('subject-select').classList.remove('hidden');
+            document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('selected'));
+        }
+
+        // 開始測驗
         function startQuiz() {
             if (selectedLessons.length === 0) {
                 alert('請先選擇要測驗的課文！');
                 return;
             }
 
-            // Collect all questions from selected lessons
+            // 收集所有題目
             currentQuestions = [];
             selectedLessons.forEach(lesson => {
-                if (questionBank[lesson]) {
-                    currentQuestions = currentQuestions.concat(questionBank[lesson]);
+                if (questionBank[currentSubject] && questionBank[currentSubject][lesson]) {
+                    currentQuestions = currentQuestions.concat(questionBank[currentSubject][lesson]);
                 }
             });
 
-            // Shuffle questions
+            // 隨機排序
             currentQuestions = shuffleArray(currentQuestions);
 
-            // Take max 15 questions
+            // 最多15題
             currentQuestions = currentQuestions.slice(0, 15);
 
             if (currentQuestions.length === 0) {
@@ -461,13 +665,14 @@
             currentIndex = 0;
             score = 0;
 
-            document.getElementById('lesson-select').style.display = 'none';
+            document.getElementById('lesson-select').classList.add('hidden');
             document.getElementById('quiz-screen').style.display = 'block';
             document.getElementById('total-num').textContent = currentQuestions.length;
 
             showQuestion();
         }
 
+        // 顯示題目
         function showQuestion() {
             const q = currentQuestions[currentIndex];
 
@@ -487,6 +692,7 @@
             document.getElementById('feedback').textContent = '';
         }
 
+        // 選擇答案
         function selectOption(index) {
             const q = currentQuestions[currentIndex];
             const options = document.querySelectorAll('.option');
@@ -523,6 +729,7 @@
             }, 2500);
         }
 
+        // 顯示結果
         function showResults() {
             document.getElementById('quiz-screen').style.display = 'none';
             document.getElementById('result-screen').style.display = 'block';
@@ -540,13 +747,18 @@
             document.getElementById('result-message').textContent = message;
         }
 
+        // 返回主選單
         function backToMenu() {
             document.getElementById('result-screen').style.display = 'none';
-            document.getElementById('lesson-select').style.display = 'block';
+            currentSubject = null;
             selectedLessons = [];
             document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('selected'));
+            document.getElementById('lesson-select').classList.add('hidden');
+            document.getElementById('subject-select').classList.remove('hidden');
         }
 
+        // 隨機排序
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
